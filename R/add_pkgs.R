@@ -18,6 +18,19 @@
 #'
 add_pkgs <- function(pkg_name, path) {
   multiloadr <- getOption("multiloadr", NULL)
+
+  desc <- read.dcf(file.path(path, "DESCRIPTION"))
+  pkg_name2 <- desc[, "Package"]
+
+  if (missing(pkg_name)) {
+    pkg_name <- pkg_name2
+  }
+  if (pkg_name != pkg_name2) {
+    stop("Package name does not match with the DESCRIPTION: ",
+         pkg_name, " != ", pkg_name2)
+  }
+
+
   new_entry <- setNames(list(path), noquote(pkg_name))
   pkg_exist <- pkg_name %in% names(multiloadr)
 
